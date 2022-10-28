@@ -1,10 +1,11 @@
 <?php
-
-use App\Models\Post;
 use Illuminate\Support\Facades\Route;
+use App\Models\Post;
 use App\Http\Controllers\PostController;
 
 use App\Models\Category;
+use App\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,55 +16,39 @@ use App\Models\Category;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('home', [
-        "title" => "Home"
+        'title' => 'Home'
     ]);
 });
-
 Route::get('/about', function () {
     return view('about', [
-        "title" => "About",
-        "name" => "Muhamad Anendha Zaska",
-        "email" => "203040090@mail.unpas.ac.id",
+        "title" => 'About',
+        "name" => "Muhammad Anendha Zaska",
+        "email" => "203040090@gmail.com",
         "image" => "profil.jpg"
     ]);
 });
-
-
-
-Route::get('/blog', function () {
-    
-    return view('posts', [
-        "title" => "Posts",
-        "posts" => Post::all()
-    ]);
-});
-
-// halaman Post
 Route::get('/blog', [PostController::class, 'index']);
-
 // Halaman Single Post
 Route::get('posts/{post:slug}', [PostController::class, 'show']);
-
-//Halaman Categories
-Route::get('/categories/', function()
-{
+route::get('categories', function () {
     return view('categories', [
         'title' => 'Post Categories',
         'categories' => Category::all()
-
     ]);
 });
-
-
-Route::get('/categories/{category:slug}', function(\App\Models\Category $category) {
+Route::get('/categories/{category:slug}', function (\App\Models\Category $category) {
     return view('category', [
         'title' => $category->name,
         'posts' => $category->posts,
-        'category' => $category->name
-
+        'category' => $category->name,
     ]);
 });
 
+Route::get('/authors/{author:username}', function (\App\Models\User $author) {
+    return view('posts', [
+        'title' => $author->name,
+        'posts' => $author->posts,
+    ]);
+});

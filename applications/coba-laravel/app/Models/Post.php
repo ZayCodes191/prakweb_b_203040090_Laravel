@@ -5,19 +5,18 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
-//    protected $fillable = [
-//        'title',
-//        'excerpt',
-//        'body',
-//    ];
-    protected $guarded = ['id'];
-    public function category()
-    {
+    protected $guarded = [
+        'id','created_at','published_at'
+    ];
+
+    protected $with = ['category','author'];
+
+    // one to one
+    public function category(){
         return $this->belongsTo(Category::class);
     }
-
-    public function author()
-    {
-        return $this->belongsTo(User::class, 'user_id');
+    // user jadi author
+    public function author(){
+        return $this->belongsTo(User::class,'user_id');
     }
 }

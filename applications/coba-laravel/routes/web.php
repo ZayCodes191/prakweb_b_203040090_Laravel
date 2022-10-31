@@ -1,11 +1,9 @@
 <?php
-use Illuminate\Support\Facades\Route;
-use App\Models\Post;
 use App\Http\Controllers\PostController;
-
+use App\Models\Post;
 use App\Models\Category;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,38 +14,50 @@ use App\Models\User;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// home route
 Route::get('/', function () {
     return view('home', [
-        'title' => 'Home'
-    ]);
-});
-Route::get('/about', function () {
-    return view('about', [
-        "title" => 'About',
-        "name" => "Muhammad Anendha Zaska",
-        "email" => "203040090@gmail.com",
-        "image" => "profil.jpg"
-    ]);
-});
-Route::get('/blog', [PostController::class, 'index']);
-// Halaman Single Post
-Route::get('posts/{post:slug}', [PostController::class, 'show']);
-route::get('categories', function () {
-    return view('categories', [
-        'title' => 'Post Categories',
-        'categories' => Category::all()
-    ]);
-});
-Route::get('/categories/{category:slug}', function (\App\Models\Category $category) {
-    return view('posts', [
-        'title' => "Post by Category : $category->name",
-        'posts' => $category->posts->load('category', 'author')
+        "title" => "Home",
+        "active" => "home"
     ]);
 });
 
-Route::get('/authors/{author:username}', function (\App\Models\User $author) {
-    return view('posts', [
-        'title' => "Post By Author : $author->name",
-        'posts' => $author->posts->load('category', 'author'),
+// about route
+Route::get('/about', function () {
+    return view('about', [
+        "title" => "About",
+        "name"  => "Muhammad Anendha Zaska",
+        "email" => "203040090@mail.unpas.ac.id",
+        "image" => "profil.jpg",
+        "active" => "about"
+    ]);
+});
+
+// blog route
+Route::get('/posts', [PostController::class, 'index']);
+// post blog route 
+Route::get('posts/{post:slug}', [PostController::class,'show']);
+// category route
+Route::get('/categories', function(){
+    return view('categories',[
+        'title'=>'Post Categories',
+        "active" => "categories",
+        'categories'=>Category::all()
+    ]);
+});
+// route ke category dengan slug
+Route::get('/categories/{category:slug}', function (Category $category) {
+    return view('posts',[
+        'title'=>"Post by Category : $category->name",
+        "active" => "categories",
+        'posts'=>$category->posts->load('category','author'),
+    ]);
+});
+// route ke author dengan slug
+Route::get('/authors/{author:username}', function (User $author) {
+    return view('posts',[
+        'title'=>"Post by Author : $author->name",
+        "active" => "authors",
+        'posts'=>$author->posts->load('category','author'),
     ]);
 });

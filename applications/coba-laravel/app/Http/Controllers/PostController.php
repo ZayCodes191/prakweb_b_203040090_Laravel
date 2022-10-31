@@ -1,23 +1,27 @@
 <?php
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Http\Request;
 class PostController extends Controller
 {
-   public function index()
-   {
-       return view('posts', [
-           'title' => "All Posts",
-           'posts' => Post::with(['author', 'category'])->latest()->get()
+    // menampilkan semua post
+    public function index()
+    {
+        return view('posts', [
+            "title" => "All Posts",
+            "active" => "posts",
 
-       ]);
-   }
+            "posts" => Post::latest()->get()// mengatasi problem n+1 dengan memanggil tabel author dan category sekaligus ketika tabel post dipanggil
+        ]);
+    }
 
-   public function show(Post $post)
-   {
-       return view('post', [
-           'title' => 'Single Post',
-           'post' => $post
-       ]);
-   }
+    // menampilkan detail post
+    public function show(Post $post)
+    {
+        return view('post', [
+            "title" => "Singgle Post",
+            "active" => "posts",
+            "post"  => $post
+        ]);
+    }
 }

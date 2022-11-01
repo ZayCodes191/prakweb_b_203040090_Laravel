@@ -14,15 +14,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// home route
+// home
 Route::get('/', function () {
     return view('home', [
         "title" => "Home",
         "active" => "home"
     ]);
 });
-
-// about route
+// about
 Route::get('/about', function () {
     return view('about', [
         "title" => "About",
@@ -33,11 +32,12 @@ Route::get('/about', function () {
     ]);
 });
 
-// blog route
 Route::get('/posts', [PostController::class, 'index']);
-// post blog route 
+
+
 Route::get('posts/{post:slug}', [PostController::class,'show']);
-// category route
+
+
 Route::get('/categories', function(){
     return view('categories',[
         'title'=>'Post Categories',
@@ -45,19 +45,34 @@ Route::get('/categories', function(){
         'categories'=>Category::all()
     ]);
 });
-// route ke category dengan slug
-Route::get('/categories/{category:slug}', function (Category $category) {
-    return view('posts',[
-        'title'=>"Post by Category : $category->name",
-        "active" => "categories",
-        'posts'=>$category->posts->load('category','author'),
-    ]);
-});
-// route ke author dengan slug
-Route::get('/authors/{author:username}', function (User $author) {
-    return view('posts',[
-        'title'=>"Post by Author : $author->name",
+
+
+Route::get('/authors', function(){
+    return view('authors',[
+        'title'=>'Post Authors',
         "active" => "authors",
-        'posts'=>$author->posts->load('category','author'),
+        'authors'=>User::all()
     ]);
 });
+
+
+
+
+// Route::get('/categories/{category:slug}', function (Category $category) {
+//     return view('posts',[
+//         'title'=>"Post by Category : $category->name",
+//         "active" => "categories",
+//         'posts'=>$category->posts->load('category','author'),
+//     ]);
+// });
+
+
+
+
+// Route::get('/authors/{author:username}', function (User $author) {
+//     return view('posts',[
+//         'title'=>"Post by Author : $author->name",
+//         "active" => "authors",
+//         'posts'=>$author->posts->load('category','author'),
+//     ]);
+// });
